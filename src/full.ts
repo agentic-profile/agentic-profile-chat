@@ -1,9 +1,7 @@
 import {
     agentHooks,
     ChatMessage,
-    CommonHooks,
-    DID,
-    User
+    DID
 } from "@agentic-profile/common";
 import {
     ChatCompletionResult
@@ -13,15 +11,15 @@ import {
     AgentChatKey,
     ChatHooks,
     ChatMessageEnvelope,
-    ChatStorage,
     HandleAgentChatMessageParams,
+    User
 } from "./models.js";
 import { chatCompletion } from "./completion.js";
 
 // This is the server side handling a chat message from a client
 export async function handleAgentChatMessage({ uid, envelope, agentSession }: HandleAgentChatMessageParams) {
     const { agentDid: peerAgentDid } = agentSession;    // client agent URI
-    const userAgentDid = agentHooks<CommonHooks>().createUserAgentDid( uid ) + "#agent-chat";
+    const userAgentDid = agentHooks<ChatHooks>().createUserAgentDid( uid ) + "#agent-chat";
     const { message, rewind } = envelope;
     const chatKey = { uid, userAgentDid, peerAgentDid } as AgentChatKey;
 
@@ -121,5 +119,5 @@ function introduceMyself( user: User, userAgentDid: DID ): ChatCompletionResult 
 }
 
 function storage() {
-    return agentHooks<CommonHooks>().storage as ChatStorage;
+    return agentHooks<ChatHooks>().storage;
 }

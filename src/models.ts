@@ -1,9 +1,7 @@
 import {
-    Account,
     ChatMessage,
     CommonStorage,
-    DID,
-    UserId
+    DID
 } from "@agentic-profile/common";
 import {
     ClientAgentSession
@@ -11,6 +9,28 @@ import {
 import {
     ChatCompletionResult
 } from "@agentic-profile/ai-provider";
+
+
+//
+// Users/Accounts
+//
+
+export type UserId = string | number;
+
+export interface User {
+    uid: UserId,
+    name: string,
+    created: Date
+}
+
+export interface Account extends User {
+    credit?: number
+}
+
+
+//
+// Chat
+//
 
 export interface StartAgentChat {
     userAgentDid: DID,    // MAY also specify agent as did:web:example.com/dave#agent-7
@@ -63,8 +83,10 @@ export interface GenerateChatReplyParams {
 }
 
 export interface ChatHooks {
-    generateChatReply: ( params: GenerateChatReplyParams ) => Promise<ChatCompletionResult>;
-    ensureCreditBalance: ( uid: UserId, actor?: Account ) => Promise<void>;
+    createUserAgentDid: ( uid: UserId ) => DID,
+    generateChatReply: ( params: GenerateChatReplyParams ) => Promise<ChatCompletionResult>,
+    ensureCreditBalance: ( uid: UserId, actor?: Account ) => Promise<void>,
+    storage: ChatStorage
 }
 
 //
@@ -72,7 +94,6 @@ export interface ChatHooks {
 //
 
 export interface ChatStorage extends CommonStorage {
-    ensureCreditBalance: ( uid: UserId ) => Promise<void>,
     fetchAccountFields: ( uid: UserId, fields?: string ) => Promise<Account | undefined>,
 
     ensureAgentChat: ( key: AgentChatKey, messages?: ChatMessage[] ) => Promise<AgentChat>,
