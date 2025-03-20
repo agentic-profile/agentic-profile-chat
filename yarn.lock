@@ -2,26 +2,27 @@
 # yarn lockfile v1
 
 
-"@agentic-profile/ai-provider@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@agentic-profile/ai-provider/-/ai-provider-0.2.3.tgz#2f44fa23eca7f5bde12865946d8b696ba6c1a5aa"
-  integrity sha512-wCg2mcULKcUmmMoUaL0S2b5u1N3vqqkLTTXeQ33XeVLFOecJruJbszeSKPD7M4MD7wHs86tgXUc1MeXM4EhXIA==
+"@agentic-profile/ai-provider@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@agentic-profile/ai-provider/-/ai-provider-0.2.4.tgz#26915b5d957fd2eb33e1c222fc9ff9d3e49c14be"
+  integrity sha512-f0RQbyhvRBpqL4ozRIMjhoKuMG27if7/sud5suVL9amyautHNE3Ito27aVqFsM9RPc2OSkPsso4gY+a4F44lKQ==
   dependencies:
-    "@agentic-profile/common" "^0.2.3"
+    "@agentic-profile/common" "^0.2.4"
     "@google-cloud/vertexai" "^1.9.3"
 
-"@agentic-profile/auth@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@agentic-profile/auth/-/auth-0.2.3.tgz#02ea26203330a0da50446dd6134d69ec3ea2076f"
-  integrity sha512-QEEOXvIQ4vexR4kCCZITJCDQVsaGzF6JtkCagy8Xx0DLrNyzdhpOLhNhVY3ByWkrXDJ1ibTFSuQvuew4g+a/zA==
+"@agentic-profile/auth@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@agentic-profile/auth/-/auth-0.2.4.tgz#264a127f33f5f868998046e0fd9f479b34440a16"
+  integrity sha512-q+D5J6pNFAfrDJ6yQERjlR4ZAse+hC9iS/2LxvUzhTnYm9Ki6DJT5SJe/bgDffvyTlnLeMCUjgVcwQlqdii/NQ==
   dependencies:
-    "@agentic-profile/common" "^0.2.3"
+    "@agentic-profile/common" "^0.2.4"
     "@noble/ed25519" "^2.2.3"
+    did-resolver "^4.1.0"
 
-"@agentic-profile/common@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@agentic-profile/common/-/common-0.2.3.tgz#b2f7a793f9c8a5902cc2387f25cb95d406c7dfd0"
-  integrity sha512-M2awxdzAAGVdxFQj69ZW2vrG/kd79rlOTEWE7zMwypMDtjXVcWXdc1WROVWMBBj+2yp6IS/mnS+6MDCn2jbHYQ==
+"@agentic-profile/common@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@agentic-profile/common/-/common-0.2.4.tgz#8ebb80ae33cad55f7dbdde9ec1b1f895258f0c73"
+  integrity sha512-D8Gc/eRjuAoi86h8sLyNlfxNfKppXPGNlRk3QfKvmIlME+luJMJ4gf87OTSKG9r98SMJI0rSLE5+H2UjIROQAA==
   dependencies:
     axios "^1.7.9"
     did-resolver "^4.1.0"
