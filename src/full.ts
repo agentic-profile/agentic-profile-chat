@@ -4,6 +4,7 @@ import {
     DID
 } from "@agentic-profile/common";
 import {
+    ChatCompletionParams,
     ChatCompletionResult
 } from "@agentic-profile/ai-provider";
 
@@ -15,7 +16,7 @@ import {
     HandleAgentChatMessageParams,
     User
 } from "./models.js";
-import { chatCompletion } from "./completion.js";
+
 
 // This is the server side handling a chat message from a client
 export async function handleAgentChatMessage({ uid, envelope, agentSession }: HandleAgentChatMessageParams) {
@@ -117,6 +118,19 @@ function introduceMyself( user: User, userAgentDid: DID ): ChatCompletionResult 
         created: new Date()
     } as ChatMessage;
     return { reply, cost: 0.01 };
+}
+
+async function chatCompletion({ agentDid, messages }: ChatCompletionParams ): Promise<ChatCompletionResult> {
+    //const bridge = selectBridge();
+    //return await bridge.completion({ agentDid, messages }); // , instruction })
+
+    const reply = {
+        from: agentDid,
+        content: "Tell me more...",
+        created: new Date()
+    } as ChatMessage;
+    console.log( "chatCompletion", agentDid, messages );
+    return { reply };
 }
 
 function storage() {

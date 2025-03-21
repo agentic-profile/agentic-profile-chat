@@ -1,6 +1,6 @@
 {
   "name": "@agentic-profile/chat",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Agentic Profile Node.js package for agent to agent chat",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,7 +31,8 @@
   "dependencies": {
     "@agentic-profile/ai-provider": "^0.2.4",
     "@agentic-profile/auth": "^0.2.4",
-    "@agentic-profile/common": "^0.2.4"
+    "@agentic-profile/common": "^0.2.4",
+    "mathjs": "^14.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",
