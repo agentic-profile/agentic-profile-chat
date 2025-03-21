@@ -79,7 +79,7 @@ export interface ChatMessageReplyEnvelope {
 export interface GenerateChatReplyParams {
     uid: UserId,
     agentDid: DID,
-    history: ChatMessage[]
+    messages: ChatMessage[]
 }
 
 export interface ChatHooks {

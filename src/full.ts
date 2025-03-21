@@ -11,6 +11,7 @@ import {
     AgentChatKey,
     ChatHooks,
     ChatMessageEnvelope,
+    GenerateChatReplyParams,
     HandleAgentChatMessageParams,
     User
 } from "./models.js";
@@ -54,7 +55,7 @@ export async function handleAgentChatMessage({ uid, envelope, agentSession }: Ha
     const params = {
         uid,
         agentDid: userAgentDid, 
-        history: history?.messages ?? []
+        messages: history?.messages ?? []
     };
     const { reply, cost } = await agentHooks<ChatHooks>().generateChatReply( params );
     await storage().recordChatCost( chatKey, cost );
@@ -88,7 +89,7 @@ export async function rewindChat( chatKey: AgentChatKey, envelope: ChatMessageEn
     await storage().updateChatHistory( chatKey, historyUpdate );
 }
 
-export async function generateChatReply( uid: string | number, userAgentDid: DID, messages: ChatMessage[] ): Promise<ChatCompletionResult> {
+export async function generateChatReply({ uid, agentDid, messages}: GenerateChatReplyParams ): Promise<ChatCompletionResult> {
     //const personas = (await fetchPersonas( uid ))?.personas?.filter(e=>!e.hidden);  // except hidden
 
     const user = await storage().fetchAccountFields( uid, "uid,name,credit" );
@@ -97,16 +98,16 @@ export async function generateChatReply( uid: string | number, userAgentDid: DID
     await agentHooks<ChatHooks>().ensureCreditBalance( uid, user );
 
     // if there are no messages from me, then introduce myself
-    if( messages.some(e=>e.from === userAgentDid) !== true ) {
-        console.log( 'intro', userAgentDid, messages );
-        return introduceMyself( user, userAgentDid );
+    if( messages.some(e=>e.from === agentDid) !== true ) {
+        console.log( 'intro', agentDid, messages );
+        return introduceMyself( user, agentDid );
     }
 
     // Craft an instruction for AI with my role and goals
     //const userGoals = personas.filter(e=>e.meta?.goals).map(e=>e.meta.goals).join('\n\n');
     //const instruction = buildInstruction( user, userGoals );
     
-    return await chatCompletion({ agentDid: userAgentDid, messages });
+    return await chatCompletion({ agentDid, messages });
 }
 
 function introduceMyself( user: User, userAgentDid: DID ): ChatCompletionResult {
