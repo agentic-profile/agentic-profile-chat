@@ -84,8 +84,9 @@ export interface GenerateChatReplyParams {
 
 export interface ChatHooks {
     createUserAgentDid: ( uid: UserId ) => DID,
-    generateChatReply: ( params: GenerateChatReplyParams ) => Promise<ChatCompletionResult>,
     ensureCreditBalance: ( uid: UserId, actor?: Account ) => Promise<void>,
+    generateChatReply: ( params: GenerateChatReplyParams ) => Promise<ChatCompletionResult>,
+    handleAgentChatMessage: ( params: HandleAgentChatMessageParams ) => void,
     storage: ChatStorage
 }
 
