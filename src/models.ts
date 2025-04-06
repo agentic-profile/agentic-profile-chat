@@ -1,24 +1,19 @@
 import {
     ChatMessage,
     CommonStorage,
-    DID
+    DID,
+    UserID
 } from "@agentic-profile/common";
-import {
-    ClientAgentSession
-} from "@agentic-profile/auth";
-import {
-    ChatCompletionResult
-} from "@agentic-profile/ai-provider";
+import { ClientAgentSession } from "@agentic-profile/auth";
+import { ChatCompletionResult } from "@agentic-profile/ai-provider";
 
 
 //
 // Users/Accounts
 //
 
-export type UserId = string | number;
-
 export interface User {
-    uid: UserId,
+    uid: UserID,
     name: string,
     created: Date
 }
@@ -59,7 +54,7 @@ export interface AgentChat extends AgentChatKey {
 }
 
 export type HandleAgentChatMessageParams = {
-    uid: UserId,
+    uid: UserID,
     envelope: ChatMessageEnvelope,
     agentSession: ClientAgentSession    
 }
@@ -77,14 +72,14 @@ export interface ChatMessageReplyEnvelope {
 // export async function chatCompletion({ agentDid, messages }: ChatCompletionParams ): Promise<ChatCompletionResult>
 
 export interface GenerateChatReplyParams {
-    uid: UserId,
+    uid: UserID,
     agentDid: DID,
     messages: ChatMessage[]
 }
 
 export interface ChatHooks {
-    createUserAgentDid: ( uid: UserId ) => DID,
-    ensureCreditBalance: ( uid: UserId, actor?: Account ) => Promise<void>,
+    createUserAgentDid: ( uid: UserID ) => DID,
+    ensureCreditBalance: ( uid: UserID, actor?: Account ) => Promise<void>,
     generateChatReply: ( params: GenerateChatReplyParams ) => Promise<ChatCompletionResult>,
     handleAgentChatMessage: ( params: HandleAgentChatMessageParams ) => void,
     storage: ChatStorage
@@ -95,7 +90,7 @@ export interface ChatHooks {
 //
 
 export interface ChatStorage extends CommonStorage {
-    fetchAccountFields: ( uid: UserId, fields?: string ) => Promise<Account | undefined>,
+    fetchAccountFields: ( uid: UserID, fields?: string ) => Promise<Account | undefined>,
 
     ensureAgentChat: ( key: AgentChatKey, messages?: ChatMessage[] ) => Promise<AgentChat>,
     recordChatCost: ( key: AgentChatKey, cost: number | undefined ) => void,
