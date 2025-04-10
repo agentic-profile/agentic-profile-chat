@@ -7,8 +7,10 @@ import {
     ChatCompletionParams,
     ChatCompletionResult
 } from "@agentic-profile/ai-provider";
+import log from "loglevel";
 
 import {
+    AgentChat,
     AgentChatKey,
     ChatHooks,
     ChatMessageEnvelope,
@@ -25,7 +27,7 @@ export async function handleAgentChatMessage({ uid, envelope, agentSession }: Ha
     const { message, rewind } = envelope;
     const chatKey = { uid, userAgentDid, peerAgentDid } as AgentChatKey;
 
-    console.log( "handleAgentChatMessage", chatKey, message );
+    //console.log( "handleAgentChatMessage", chatKey, message );
 
     // validate the message
     if( !message )
@@ -37,26 +39,27 @@ export async function handleAgentChatMessage({ uid, envelope, agentSession }: Ha
     if( !message.content )
         throw new Error( "Chat message missing content" );
 
-    // save incoming message locally
-    if( rewind )
-        await rewindChat( chatKey, envelope );
-    else {
-        await storage().insertChatMessage( chatKey, message, true );
-    }
-
     // fetch all messages for AI
     let chat = await storage().fetchAgentChat( chatKey );
     if( !chat ) {
-        console.log( "Failed to find history, creating new chat", chatKey );
+        log.warn( "Failed to find history, creating new chat", chatKey );
         chat = await storage().ensureAgentChat( chatKey, [ message as ChatMessage ] );
+    } else {
+        // save incoming message locally (and maybe rewind)
+        if( rewind )
+            await rewindChat( chatKey, envelope, chat );
+        else {
+            ensureChatHistoryMessages( chat );
+            chat.history.messages.push( message );
+            await storage().insertChatMessage( chatKey, message, true );
+        }
     }
-    const history = chat.history;
 
     // generate reply and track cost
     const params = {
         uid,
         agentDid: userAgentDid, 
-        messages: history?.messages ?? []
+        messages: chat.history.messages
     };
     const { reply, cost } = await agentHooks<ChatHooks>().generateChatReply( params );
     await storage().recordChatCost( chatKey, cost );
@@ -67,27 +70,38 @@ export async function handleAgentChatMessage({ uid, envelope, agentSession }: Ha
     return { reply };
 }
 
-export async function rewindChat( chatKey: AgentChatKey, envelope: ChatMessageEnvelope ) {
-    const { message, rewind } = envelope; 
-    const chat = await storage().fetchAgentChat( chatKey );
-    if( !chat )
-        throw new Error(`Failed to rewind; could not find chat ${chatKey} ${rewind}`);    
+function ensureChatHistoryMessages( chat: AgentChat ) {
+    if( !chat.history )
+        chat.history = { messages: [] };
+    else if( !chat.history.messages )
+        chat.history.messages = [];
+}
 
-    let history = chat.history ?? {};
-    if( !history.messages )
-        history.messages = [];
+// if chat is provided, modifies in place
+export async function rewindChat( chatKey: AgentChatKey, envelope: ChatMessageEnvelope, chat?: AgentChat ) {
+    const { message, rewind } = envelope; 
+
+    if( !chat ) {
+        chat = await storage().fetchAgentChat( chatKey );
+        if( !chat )
+            throw new Error(`Failed to rewind; could not find chat ${chatKey} ${rewind}`);
+    }  
+
+    ensureChatHistoryMessages( chat );
+    const messages = chat.history.messages;
+
     const rewindDate = new Date(rewind!);
-    let p = history.messages.findIndex((e: ChatMessage)=>e.created && new Date(e.created) >= rewindDate);
+    let p = messages.findIndex((e: ChatMessage)=>e.created && new Date(e.created) >= rewindDate);
     if( p === -1 ) {
-        console.log( "Failed to find message to rewind to", rewindDate, history );
+        log.warn( "Failed to find message to rewind to", rewindDate, messages );
         p = 0;
     }
 
-    const messages = history.messages.slice(0,p);
+    messages.splice(0,p);
     if( message )
         messages.push( message );
-    const historyUpdate = { ...history, messages };
-    await storage().updateChatHistory( chatKey, historyUpdate );
+    //const historyUpdate = { ...history, messages };
+    await storage().updateChatHistory( chatKey, chat.history );
 }
 
 export async function generateChatReply({ uid, agentDid, messages}: GenerateChatReplyParams ): Promise<ChatCompletionResult> {
@@ -100,7 +114,7 @@ export async function generateChatReply({ uid, agentDid, messages}: GenerateChat
 
     // if there are no messages from me, then introduce myself
     if( messages.some(e=>e.from === agentDid) !== true ) {
-        console.log( 'intro', agentDid, messages );
+        log.trace( 'generateChatReply() no messages, so introducing myself', agentDid, messages );
         return introduceMyself( user, agentDid );
     }
 
@@ -129,7 +143,7 @@ async function chatCompletion({ agentDid, messages }: ChatCompletionParams ): Pr
         content: "Tell me more...",
         created: new Date()
     } as ChatMessage;
-    console.log( "chatCompletion", agentDid, messages );
+    //console.log( "chatCompletion", agentDid, messages );
     return { reply };
 }
 

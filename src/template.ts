@@ -1,8 +1,9 @@
 import math from "./math.js"
+import log from "loglevel";
 
 function getValue( context: any, path: string, depth:number = 0 ): string {
     if( depth > 10 ) {
-        console.error('Template recursing too deeply:', path, JSON.stringify(context) );
+        log.error('Template recursing too deeply:', path, JSON.stringify(context) );
         throw new Error('Template recursing too deeply: ' + path);
     }
 
@@ -44,7 +45,7 @@ export function replacePlaceholders({template, context, scopes = ['','exports.']
             return result;
         }
 
-        console.log( 'Failed to find value for placeholder', placeholder, context );
+        log.warn( 'Failed to find value for placeholder', placeholder, context );
         return '';
     });
 }

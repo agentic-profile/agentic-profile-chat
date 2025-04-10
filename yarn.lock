@@ -5,23 +5,23 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@agentic-profile/ai-provider@npm:^0.4.5":
-  version: 0.4.5
-  resolution: "@agentic-profile/ai-provider@npm:0.4.5"
+"@agentic-profile/ai-provider@npm:^0.4.8":
+  version: 0.4.8
+  resolution: "@agentic-profile/ai-provider@npm:0.4.8"
   dependencies:
-    "@agentic-profile/common": "npm:^0.4.5"
+    "@agentic-profile/common": "npm:^0.4.8"
     "@google-cloud/vertexai": "npm:^1.9.3"
-  checksum: 10c0/e86d1ca872f5ab7b2052f973781e7756f479d476542fd4666c357ad48425ace8e486ecf5aca10582d9c0ab73713336f8f3df3b51ce4a03be9fff0bfd2dc2d9e5
+  checksum: 10c0/ca5f0d8ab420509ffb942178ca7722e94b1a51dce8e3deb25adead976ec84482bd00678010e0be93f6a78ee93b398aa96d9aeeb820beccdf2f7a20ff47570664
   languageName: node
   linkType: hard
 
-"@agentic-profile/auth@npm:^0.4.6":
-  version: 0.4.6
-  resolution: "@agentic-profile/auth@npm:0.4.6"
+"@agentic-profile/auth@npm:^0.4.8":
+  version: 0.4.8
+  resolution: "@agentic-profile/auth@npm:0.4.8"
   dependencies:
-    "@agentic-profile/common": "npm:^0.4.6"
+    "@agentic-profile/common": "npm:^0.4.8"
     "@noble/ed25519": "npm:^2.2.3"
-  checksum: 10c0/342fc5be01fa8d75e65c6f3b699af50dc8f327e33aa201d38ec0305d244e3d8f3611fed9a84ab08aff804782bf8ec92aa1b5de9f01655371df84f42a856b3ed6
+  checksum: 10c0/d919c105fb006bd5dcae894275bdc416f0fa189cef024688b29916be23eee7c967900149ff611f2d6e256a21782402a0df94f7fb902334fcebd404ea7e8c9a24
   languageName: node
   linkType: hard
 
@@ -29,9 +29,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@agentic-profile/chat@workspace:."
   dependencies:
-    "@agentic-profile/ai-provider": "npm:^0.4.5"
-    "@agentic-profile/auth": "npm:^0.4.6"
-    "@agentic-profile/common": "npm:^0.4.6"
+    "@agentic-profile/ai-provider": "npm:^0.4.8"
+    "@agentic-profile/auth": "npm:^0.4.8"
+    "@agentic-profile/common": "npm:^0.4.8"
     "@babel/core": "npm:^7.26.10"
     "@babel/preset-env": "npm:^7.26.9"
     "@babel/preset-typescript": "npm:^7.27.0"
@@ -48,12 +48,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@agentic-profile/common@npm:^0.4.5, @agentic-profile/common@npm:^0.4.6":
-  version: 0.4.6
-  resolution: "@agentic-profile/common@npm:0.4.6"
+"@agentic-profile/common@npm:^0.4.8":
+  version: 0.4.8
+  resolution: "@agentic-profile/common@npm:0.4.8"
   dependencies:
     did-resolver: "npm:^4.1.0"
-  checksum: 10c0/c1c9dbab44bfdaefbf5f19adb9d62c9229cedea14aeb391ab0fe7b2e0007b5c3d7696238161aeba4aae1ec90a5d73f34e108230d7a46d5157f6d7e48077e028a
+    loglevel: "npm:^1.9.2"
+  checksum: 10c0/7e1abc24fdda60f198968e3dff3e46d62c5e8c545afa8666ce27165f37fec4f3958ee54ddff741c53e0bf1664c1a9c6084614cc41327fed9e332c75eeba7aca6
   languageName: node
   linkType: hard
 
@@ -4234,6 +4235,13 @@ __metadata:
   version: 4.7.0
   resolution: "lodash.sortby@npm:4.7.0"
   checksum: 10c0/fc48fb54ff7669f33bb32997cab9460757ee99fafaf72400b261c3e10fde21538e47d8cfcbe6a25a31bcb5b7b727c27d52626386fc2de24eb059a6d64a89cdf5
+  languageName: node
+  linkType: hard
+
+"loglevel@npm:^1.9.2":
+  version: 1.9.2
+  resolution: "loglevel@npm:1.9.2"
+  checksum: 10c0/1e317fa4648fe0b4a4cffef6de037340592cee8547b07d4ce97a487abe9153e704b98451100c799b032c72bb89c9366d71c9fb8192ada8703269263ae77acdc7
   languageName: node
   linkType: hard
 

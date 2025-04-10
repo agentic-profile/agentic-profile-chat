@@ -1,6 +1,6 @@
 {
   "name": "@agentic-profile/chat",
-  "version": "0.4.6",
+  "version": "0.4.8",
   "description": "Agentic Profile Node.js package for agent to agent chat",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/agentic-profile/agentic-profile-chat#readme",
   "dependencies": {
-    "@agentic-profile/ai-provider": "^0.4.5",
-    "@agentic-profile/auth": "^0.4.6",
-    "@agentic-profile/common": "^0.4.6",
+    "@agentic-profile/ai-provider": "^0.4.8",
+    "@agentic-profile/auth": "^0.4.8",
+    "@agentic-profile/common": "^0.4.8",
     "mathjs": "^14.4.0"
   },
   "devDependencies": {
