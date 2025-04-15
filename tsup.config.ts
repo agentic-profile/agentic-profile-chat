@@ -8,5 +8,9 @@ export default defineConfig({
     sourcemap: true,
     clean: true,
     outDir: "dist",
-    target: "esnext"
+    target: "esnext",
+    external: [
+        "loglevel",
+        "@agentic-profile/common"
+    ]
 });

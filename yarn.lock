@@ -5,23 +5,23 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@agentic-profile/ai-provider@npm:^0.4.8":
-  version: 0.4.8
-  resolution: "@agentic-profile/ai-provider@npm:0.4.8"
+"@agentic-profile/ai-provider@npm:^0.4.10":
+  version: 0.4.10
+  resolution: "@agentic-profile/ai-provider@npm:0.4.10"
   dependencies:
-    "@agentic-profile/common": "npm:^0.4.8"
+    "@agentic-profile/common": "npm:^0.4.10"
     "@google-cloud/vertexai": "npm:^1.9.3"
-  checksum: 10c0/ca5f0d8ab420509ffb942178ca7722e94b1a51dce8e3deb25adead976ec84482bd00678010e0be93f6a78ee93b398aa96d9aeeb820beccdf2f7a20ff47570664
+  checksum: 10c0/8c0317aa1dc016ca293513e56037c5c69b7dc47b161bb747925e315cc3fbaef3e71255627e68a0f1c55f5070bdc4323bcbf5b68ddd7f1f850153fd8b8ab8bb5b
   languageName: node
   linkType: hard
 
-"@agentic-profile/auth@npm:^0.4.8":
-  version: 0.4.8
-  resolution: "@agentic-profile/auth@npm:0.4.8"
+"@agentic-profile/auth@npm:^0.4.10":
+  version: 0.4.10
+  resolution: "@agentic-profile/auth@npm:0.4.10"
   dependencies:
-    "@agentic-profile/common": "npm:^0.4.8"
+    "@agentic-profile/common": "npm:^0.4.10"
     "@noble/ed25519": "npm:^2.2.3"
-  checksum: 10c0/d919c105fb006bd5dcae894275bdc416f0fa189cef024688b29916be23eee7c967900149ff611f2d6e256a21782402a0df94f7fb902334fcebd404ea7e8c9a24
+  checksum: 10c0/4a44953394692a3edf71427e7605c02eba2921c88971082f5c7f79040e6093f19ffac7804e655d783dbcb2864c18a3463b7405e1ae6e0aa8b6b104114dfc55d5
   languageName: node
   linkType: hard
 
@@ -29,9 +29,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@agentic-profile/chat@workspace:."
   dependencies:
-    "@agentic-profile/ai-provider": "npm:^0.4.8"
-    "@agentic-profile/auth": "npm:^0.4.8"
-    "@agentic-profile/common": "npm:^0.4.8"
+    "@agentic-profile/ai-provider": "npm:^0.4.10"
+    "@agentic-profile/auth": "npm:^0.4.10"
     "@babel/core": "npm:^7.26.10"
     "@babel/preset-env": "npm:^7.26.9"
     "@babel/preset-typescript": "npm:^7.27.0"
@@ -48,13 +47,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@agentic-profile/common@npm:^0.4.8":
-  version: 0.4.8
-  resolution: "@agentic-profile/common@npm:0.4.8"
+"@agentic-profile/common@npm:^0.4.10":
+  version: 0.4.10
+  resolution: "@agentic-profile/common@npm:0.4.10"
   dependencies:
     did-resolver: "npm:^4.1.0"
     loglevel: "npm:^1.9.2"
-  checksum: 10c0/7e1abc24fdda60f198968e3dff3e46d62c5e8c545afa8666ce27165f37fec4f3958ee54ddff741c53e0bf1664c1a9c6084614cc41327fed9e332c75eeba7aca6
+  checksum: 10c0/29be8e96c6cd009c33ec266e9f467ffd9db160fe7b824459ec78deb0bf67d1e711a4e16560e3969d89df9d3c2d3c88bc49fa3a6b8527377d558e03526376832d
   languageName: node
   linkType: hard
 

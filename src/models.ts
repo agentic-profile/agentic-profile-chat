@@ -1,5 +1,6 @@
 import {
     ChatMessage,
+    ChatResolution,
     CommonStorage,
     DID,
     UserID
@@ -50,7 +51,9 @@ export interface AgentChat extends AgentChatKey {
     updated: Date,
     cost: number,
     aimodel?: string,
-    history: ChatMessageHistory
+    history: ChatMessageHistory,
+    userResolution?: ChatResolution,
+    peerResolution?: ChatResolution
 }
 
 export type HandleAgentChatMessageParams = {
@@ -96,5 +99,6 @@ export interface ChatStorage extends CommonStorage {
     recordChatCost: ( key: AgentChatKey, cost: number | undefined ) => void,
     insertChatMessage: ( key: AgentChatKey, message: ChatMessage, ignoreFailure?: boolean ) => void,
     updateChatHistory: ( key: AgentChatKey, history: ChatMessageHistory ) => void,
+    updateChatResolution: ( key: AgentChatKey, userResolution: ChatResolution | null | undefined, peerResolution: ChatResolution | null | undefined ) => void,
     fetchAgentChat: ( key: AgentChatKey ) => Promise<AgentChat | undefined>
 }

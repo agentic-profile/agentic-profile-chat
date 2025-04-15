@@ -27,8 +27,6 @@ export async function handleAgentChatMessage({ uid, envelope, agentSession }: Ha
     const { message, rewind } = envelope;
     const chatKey = { uid, userAgentDid, peerAgentDid } as AgentChatKey;
 
-    //console.log( "handleAgentChatMessage", chatKey, message );
-
     // validate the message
     if( !message )
         throw new Error( "Missing chat message" );
@@ -55,17 +53,31 @@ export async function handleAgentChatMessage({ uid, envelope, agentSession }: Ha
         }
     }
 
+    if( message.meta?.resolution ) 
+        await storage().updateChatResolution( chatKey, undefined, message.meta.resolution );
+
     // generate reply and track cost
     const params = {
         uid,
         agentDid: userAgentDid, 
         messages: chat.history.messages
     };
-    const { reply, cost } = await agentHooks<ChatHooks>().generateChatReply( params );
+    const { reply, json, cost } = await agentHooks<ChatHooks>().generateChatReply( params );
     await storage().recordChatCost( chatKey, cost );
 
     // save reply locally
     await storage().insertChatMessage( chatKey, reply );
+
+    // any meta/tool data?  Only use first found...
+    const meta = json?.find(e=>e.meta)?.meta;
+    if( meta ) {
+        reply.meta = meta; // pass back to caller
+
+        if( meta.resolution !== undefined ) {  // can be NULL to reset resolution
+            log.debug( 'Updating chat resolution', chatKey, meta.resolution );
+            await storage().updateChatResolution( chatKey, meta.resolution, undefined );
+        }
+    }
 
     return { reply };
 }
@@ -88,25 +100,31 @@ export async function rewindChat( chatKey: AgentChatKey, envelope: ChatMessageEn
     }  
 
     ensureChatHistoryMessages( chat );
-    const messages = chat.history.messages;
+    chat.history.messages = rewindMessages( rewind, chat.history.messages );
 
-    const rewindDate = new Date(rewind!);
-    let p = messages.findIndex((e: ChatMessage)=>e.created && new Date(e.created) >= rewindDate);
-    if( p === -1 ) {
-        log.warn( "Failed to find message to rewind to", rewindDate, messages );
-        p = 0;
-    }
-
-    messages.splice(0,p);
     if( message )
-        messages.push( message );
-    //const historyUpdate = { ...history, messages };
+        chat.history.messages.push( message );
+
     await storage().updateChatHistory( chatKey, chat.history );
 }
 
-export async function generateChatReply({ uid, agentDid, messages}: GenerateChatReplyParams ): Promise<ChatCompletionResult> {
-    //const personas = (await fetchPersonas( uid ))?.personas?.filter(e=>!e.hidden);  // except hidden
+export function rewindMessages(rewind: string | undefined, messages: ChatMessage[] = []): ChatMessage[] {
+    if( !rewind )
+        return messages;
 
+    const rewindDate = new Date(rewind);
+    const index = messages.findIndex(msg =>
+        msg.created && new Date(msg.created) >= rewindDate
+    );
+
+    const rewindIndex = index !== -1 ? index : 0;
+    const rewoundMessages = messages.slice(0,rewindIndex);
+
+    log.debug('doRewind rewound', rewindIndex, rewoundMessages);
+    return rewoundMessages;
+}
+
+export async function generateChatReply({ uid, agentDid, messages}: GenerateChatReplyParams ): Promise<ChatCompletionResult> {
     const user = await storage().fetchAccountFields( uid, "uid,name,credit" );
     if( !user )
         throw new Error("Unable to generate chat reply, cannot find user with id " + uid );
@@ -117,10 +135,6 @@ export async function generateChatReply({ uid, agentDid, messages}: GenerateChat
         log.trace( 'generateChatReply() no messages, so introducing myself', agentDid, messages );
         return introduceMyself( user, agentDid );
     }
-
-    // Craft an instruction for AI with my role and goals
-    //const userGoals = personas.filter(e=>e.meta?.goals).map(e=>e.meta.goals).join('\n\n');
-    //const instruction = buildInstruction( user, userGoals );
     
     return await chatCompletion({ agentDid, messages });
 }
@@ -135,15 +149,11 @@ function introduceMyself( user: User, userAgentDid: DID ): ChatCompletionResult 
 }
 
 async function chatCompletion({ agentDid, messages }: ChatCompletionParams ): Promise<ChatCompletionResult> {
-    //const bridge = selectBridge();
-    //return await bridge.completion({ agentDid, messages }); // , instruction })
-
     const reply = {
         from: agentDid,
         content: "Tell me more...",
         created: new Date()
     } as ChatMessage;
-    //console.log( "chatCompletion", agentDid, messages );
     return { reply };
 }
 
