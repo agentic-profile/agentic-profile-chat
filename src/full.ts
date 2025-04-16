@@ -145,7 +145,18 @@ function introduceMyself( user: User, userAgentDid: DID ): ChatCompletionResult 
         content: `My name is ${user.name}. Nice to meet you!`,
         created: new Date()
     } as ChatMessage;
-    return { reply, cost: 0.01 };
+    return {
+        reply,
+        json: [],
+        textWithoutJson: reply.content,
+        cost: 0.01,
+        context: {
+            model: "none:introduction-script",
+            params: {},
+            response: {},
+            promptMarkdown: ""
+        } 
+    } as ChatCompletionResult;
 }
 
 async function chatCompletion({ agentDid, messages }: ChatCompletionParams ): Promise<ChatCompletionResult> {
@@ -154,7 +165,18 @@ async function chatCompletion({ agentDid, messages }: ChatCompletionParams ): Pr
         content: "Tell me more...",
         created: new Date()
     } as ChatMessage;
-    return { reply };
+    return {
+        reply,
+        json: [],
+        textWithoutJson: reply.content,
+        cost: 0.01,
+        context: {
+            model: "none:hello-script",
+            params: {},
+            response: {},
+            promptMarkdown: ""
+        } 
+    } as ChatCompletionResult;
 }
 
 function storage() {
