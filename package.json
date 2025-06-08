@@ -1,6 +1,6 @@
 {
   "name": "@agentic-profile/chat",
-  "version": "0.4.12",
+  "version": "0.6.0",
   "description": "Agentic Profile Node.js package for agent to agent chat",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,14 +23,16 @@
     "url": "git+https://github.com/agentic-profile/agentic-profile-chat.git"
   },
   "author": "Mike Prince",
-  "license": "MIT",
+  "license": "Apache-2",
   "bugs": {
     "url": "https://github.com/agentic-profile/agentic-profile-chat/issues"
   },
   "homepage": "https://github.com/agentic-profile/agentic-profile-chat#readme",
   "dependencies": {
-    "@agentic-profile/ai-provider": "^0.4.11",
-    "@agentic-profile/auth": "^0.4.10",
+    "@agentic-profile/ai-provider": "^0.6.0",
+    "@agentic-profile/auth": "^0.6.0",
+    "@agentic-profile/common": "^0.6.0",
+    "loglevel": "^1.9.2",
     "mathjs": "^14.4.0"
   },
   "devDependencies": {
@@ -47,5 +49,5 @@
     "tsup": "^8.4.0",
     "typescript": "^5.8.3"
   },
-  "packageManager": "yarn@4.8.1"
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }

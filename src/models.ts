@@ -1,10 +1,9 @@
 import {
-    ChatMessage,
-    ChatResolution,
-    CommonStorage,
+    AgentMessage,
     DID,
+    Metadata,
     UserID
-} from "@agentic-profile/common";
+} from "@agentic-profile/common/schema";
 import { ClientAgentSession } from "@agentic-profile/auth";
 import { ChatCompletionResult } from "@agentic-profile/ai-provider";
 
@@ -34,15 +33,15 @@ export interface StartAgentChat {
     reset?: boolean
 }
 
-export interface ChatMessageHistory {
-    messages: ChatMessage[]
+export interface AgentMessageHistory {
+    messages: AgentMessage[]
 }
 
 export interface AgentChatKey {
-    uid: number | string,       // uid that server agent represents (maps to an agentic profile server represents)
+    uid: UserID,        // uid that server agent represents (maps to an agentic profile server represents)
     userAgentDid: DID,
-    peerAgentDid: DID           // client/peer agent we are chatting with (but may be local)
-                                // usually includes a fragment to qualify the exact agent 
+    peerAgentDid: DID   // client/peer agent we are chatting with (but may be local)
+                        // usually includes a fragment to qualify the exact agent 
 }
 
 export interface AgentChat extends AgentChatKey {
@@ -51,25 +50,29 @@ export interface AgentChat extends AgentChatKey {
     updated: Date,
     cost: number,
     aimodel?: string,
-    history: ChatMessageHistory,
-    userResolution?: ChatResolution,
-    peerResolution?: ChatResolution
+    history: AgentMessageHistory,
+    userResolution?: Metadata,
+    peerResolution?: Metadata
 }
 
 export type HandleAgentChatMessageParams = {
-    uid: UserID,
+    //uid: UserID,
     envelope: ChatMessageEnvelope,
     agentSession: ClientAgentSession    
 }
 
+export interface HandleAgentChatMessageResult {
+    reply: AgentMessage
+}
+
 export interface ChatMessageEnvelope {
     to: DID,
-    message: ChatMessage,
+    message: AgentMessage,
     rewind?: string
 }
 
 export interface ChatMessageReplyEnvelope {
-    reply: ChatMessage
+    reply: AgentMessage
 }
 
 // export async function chatCompletion({ agentDid, messages }: ChatCompletionParams ): Promise<ChatCompletionResult>
@@ -77,28 +80,29 @@ export interface ChatMessageReplyEnvelope {
 export interface GenerateChatReplyParams {
     uid: UserID,
     agentDid: DID,
-    messages: ChatMessage[]
+    messages: AgentMessage[]
 }
 
 export interface ChatHooks {
-    createUserAgentDid: ( uid: UserID ) => DID,
-    ensureCreditBalance: ( uid: UserID, actor?: Account ) => Promise<void>,
-    generateChatReply: ( params: GenerateChatReplyParams ) => Promise<ChatCompletionResult>,
-    handleAgentChatMessage: ( params: HandleAgentChatMessageParams ) => void,
-    storage: ChatStorage
+    resolveUserAgenticProfileDid( uid: UserID ): Promise<DID>,
+    resolveUidFromAgentDid( agentDid: DID ): Promise<UserID>,
+    ensureCreditBalance( uid: UserID, actor?: Account ): Promise<number>,
+    generateChatReply( params: GenerateChatReplyParams ): Promise<ChatCompletionResult>,
+    handleAgentChatMessage( params: HandleAgentChatMessageParams, chatHooks: ChatHooks  ): Promise<HandleAgentChatMessageResult>,
+    chatStore: ChatStore
 }
 
 //
 // Persistence/Storage
 //
 
-export interface ChatStorage extends CommonStorage {
+export interface ChatStore {
     fetchAccountFields: ( uid: UserID, fields?: string ) => Promise<Account | undefined>,
 
-    ensureAgentChat: ( key: AgentChatKey, messages?: ChatMessage[] ) => Promise<AgentChat>,
+    ensureAgentChat: ( key: AgentChatKey, messages?: AgentMessage[] ) => Promise<AgentChat>,
     recordChatCost: ( key: AgentChatKey, cost: number | undefined ) => void,
-    insertChatMessage: ( key: AgentChatKey, message: ChatMessage, ignoreFailure?: boolean ) => void,
-    updateChatHistory: ( key: AgentChatKey, history: ChatMessageHistory ) => void,
-    updateChatResolution: ( key: AgentChatKey, userResolution: ChatResolution | null | undefined, peerResolution: ChatResolution | null | undefined ) => void,
+    insertChatMessage: ( key: AgentChatKey, message: AgentMessage, ignoreFailure?: boolean ) => void,
+    updateChatHistory: ( key: AgentChatKey, history: AgentMessageHistory ) => void,
+    updateChatResolution: ( key: AgentChatKey, userResolution: Metadata | null | undefined, peerResolution: Metadata | null | undefined ) => void,
     fetchAgentChat: ( key: AgentChatKey ) => Promise<AgentChat | undefined>
 }
