@@ -1,4 +1,5 @@
 .DS_Store
+pnpm-workspace.yaml
 
 # Logs
 logs

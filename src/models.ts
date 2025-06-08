@@ -88,7 +88,7 @@ export interface ChatHooks {
     resolveUidFromAgentDid( agentDid: DID ): Promise<UserID>,
     ensureCreditBalance( uid: UserID, actor?: Account ): Promise<number>,
     generateChatReply( params: GenerateChatReplyParams ): Promise<ChatCompletionResult>,
-    handleAgentChatMessage( params: HandleAgentChatMessageParams, chatHooks: ChatHooks  ): Promise<HandleAgentChatMessageResult>,
+    handleAgentChatMessage( params: HandleAgentChatMessageParams, chatHooks: ChatHooks ): Promise<HandleAgentChatMessageResult>,
     chatStore: ChatStore
 }
 
